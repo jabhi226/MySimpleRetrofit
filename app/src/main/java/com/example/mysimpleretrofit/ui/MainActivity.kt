@@ -4,14 +4,18 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.example.mysimpleretrofit.databinding.ActivityMainBinding
+import com.example.mysimpleretrofit.network.NetworkResponse
 import com.example.mysimpleretrofit.network.RetrofitClient
 import com.example.mysimpleretrofit.responseModels.MedicineDetailResponse
 import com.example.mysimpleretrofit.responseModels.SecondApiResponse
 import com.example.mysimpleretrofit.utils.Constants
+import com.google.gson.Gson
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.lang.StringBuilder
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
 
@@ -21,10 +25,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater, null, false)
         setContentView(binding.root)
-        println("12345790")
+
         binding.apply {
             api1.setOnClickListener(this@MainActivity)
             api2.setOnClickListener(this@MainActivity)
+            api3.setOnClickListener(this@MainActivity)
         }
     }
 
@@ -66,7 +71,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                             call: Call<List<SecondApiResponse>>,
                             response: Response<List<SecondApiResponse>>
                         ) {
-                            if (response.isSuccessful){
+                            if (response.isSuccessful) {
                                 val s = StringBuilder()
                                 response.body()?.forEach {
                                     s.append(it.name + ",\n")
@@ -85,12 +90,35 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     }
                 )
             }
+            binding.api3.id -> {
+                val fullUrl = Constants.GITHUB_API + "/users/${binding.githubUsername.text}"
+                CoroutineScope(Dispatchers.IO).launch {
+                    when (val call =
+                        RetrofitClient.getNetworkInterface()?.getGitHubUserData(fullUrl)) {
+                        is NetworkResponse.Success -> {
+                            setOutput(Gson().toJson(call.body))
+                        }
+                        is NetworkResponse.ApiError -> {
+                            setOutput(call.body.message)
+                        }
+                        is NetworkResponse.NetworkError -> {
+                            setOutput(call.error?.message)
+                        }
+                        is NetworkResponse.UnknownError -> {
+                            setOutput(call.error?.message)
+                        }
+                        null -> {
+                            setOutput("ERROR")
+                        }
+                    }
+                }
+            }
         }
     }
 
     private fun setOutput(output: String?) {
         runOnUiThread {
-            binding.output.text = output ?: "empty/null"
+            binding.output.setText(output ?: "empty/null")
         }
     }
 }

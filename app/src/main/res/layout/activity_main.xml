@@ -13,7 +13,7 @@
         android:layout_margin="8dp"
         android:background="@android:color/holo_blue_bright"
         android:padding="8dp"
-        android:text="API 1"
+        android:text="API with dynamic url"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -25,21 +25,48 @@
         android:layout_margin="8dp"
         android:background="@android:color/holo_blue_bright"
         android:padding="8dp"
-        android:text="API 2"
+        android:text="API with default url"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/api1" />
 
+    <EditText
+        android:id="@+id/github_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/darker_gray"
+        android:padding="8dp"
+        android:text="jabhi226"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@id/api3"
+        app:layout_constraintEnd_toStartOf="@+id/api3"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/api3" />
+
     <TextView
+        android:id="@+id/api3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:background="@android:color/holo_blue_bright"
+        android:padding="8dp"
+        android:text="Network Response wrapper"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/github_username"
+        app:layout_constraintTop_toBottomOf="@id/api2" />
+
+    <EditText
         android:id="@+id/output"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="8dp"
-        android:background="@android:color/holo_green_light"
+        android:background="@android:color/darker_gray"
         android:padding="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/api2" />
+        app:layout_constraintTop_toBottomOf="@id/api3" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
